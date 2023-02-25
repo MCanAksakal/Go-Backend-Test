@@ -8,7 +8,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"backendtest/models"
+	"github.com/MCanAksakal/Go-Backend-Test/models"
 )
 
 // ///////Add Order////////////

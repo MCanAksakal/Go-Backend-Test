@@ -7,8 +7,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"backendtest/controllers"
-	"backendtest/models"
+	"github.com/MCanAksakal/Go-Backend-Test/controllers"
+	"github.com/MCanAksakal/Go-Backend-Test/models"
 )
 
 func main() {
