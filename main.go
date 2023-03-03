@@ -30,7 +30,7 @@ func main() {
 	})
 
 	log.Printf("Server started successfully")
-	api.Run(":3000")
+	api.Run()
 }
 
 func ConnectDB() *gorm.DB {
