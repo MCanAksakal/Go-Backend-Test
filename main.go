@@ -1,38 +1,59 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"os"
-	"time"
 
 	"github.com/gin-gonic/gin"
-
-	"github.com/MCanAksakal/Go-Backend-Test/controllers"
-	"github.com/MCanAksakal/Go-Backend-Test/models"
+	"github.com/joho/godotenv"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
 func main() {
-	os.Setenv("TZ", "Asia/Jakarta")
-	fmt.Printf("Started at : %3v \n", time.Now())
 
-	//InitPostgres()
-	models.InitGormPostgres()
-	defer models.MPosGORM.Close()
+	ConnectDB()
 
-	// Set the router as the default one shipped with Gin
 	gin.SetMode(gin.ReleaseMode)
-	router := gin.Default()
+	api := gin.Default()
 
-	// Setup route group for the API
-	api := router.Group("/api")
+	api.POST("/post", func(c *gin.Context) {
+		name := c.PostForm("name")
+		message := c.PostForm("message")
 
-	api.POST("/order/add", controllers.OrderAdd)
-	api.POST("/order/delete", controllers.OrderDelete)
-	api.POST("/order/edit", controllers.OrderEdit)
-	api.POST("/order/show", controllers.OrderShowByDate)
-	api.GET("/order/show", controllers.OrderShowByPhone)
-	api.GET("/order/id/:orderid", controllers.OrderShowByID)
+		c.JSON(200, gin.H{"name": name, "message": message})
+	})
+	api.GET("/ping", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"message": "pong",
+		})
+	})
 
-	// Start and run the server
-	router.Run(":4000")
+	log.Printf("Server started successfully")
+	api.Run(":3000")
+}
+
+func ConnectDB() *gorm.DB {
+	err := godotenv.Load("Database.env")
+	if err != nil {
+		log.Fatal("Database.env load failed")
+	} else {
+		log.Printf("Database.env loaded successfully")
+	}
+
+	db_host := os.Getenv("DB_Host")
+	db_port := os.Getenv("DB_Port")
+	db_database := os.Getenv("DB_Database")
+	db_username := os.Getenv("DB_Username")
+	db_password := os.Getenv("DB_Password")
+
+	dsn := "host= " + db_host + " user=" + db_username + " password=" + db_password + " dbname=" + db_database + " port=" + db_port
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	if err != nil {
+		log.Fatal("Database connection failed")
+	} else {
+		log.Printf("Database connection succeeded")
+	}
+
+	return db
 }
