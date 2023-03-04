@@ -1,11 +1,10 @@
-module github.com/MCanAksakal/Go-Backend-Test
+module MainPackage
 
 go 1.19
 
 require (
 	github.com/gin-gonic/gin v1.9.0
-	github.com/jinzhu/gorm v1.9.16
-	github.com/lib/pq v1.10.7
+	github.com/joho/godotenv v1.5.1
 	gorm.io/driver/postgres v1.4.8
 	gorm.io/gorm v1.24.6
 )
@@ -23,7 +22,6 @@ require (
 	github.com/jackc/pgx/v5 v5.3.0 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
-	github.com/joho/godotenv v1.5.1
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/klauspost/cpuid/v2 v2.0.9 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
