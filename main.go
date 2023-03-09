@@ -13,9 +13,9 @@ func main() {
 	gin.SetMode(gin.ReleaseMode)
 	api := gin.Default()
 
-	api.POST("/post", UserCRUD.CreateUser)
-	api.GET("/userinfo/:id", UserCRUD.GetUser)
-	api.GET("/userlist", UserCRUD.GetAllUsers)
+	api.POST("/post", UserCRUD.CreatePost)
+	api.GET("/userinfo/:id", UserCRUD.GetPost)
+	api.GET("/userlist", UserCRUD.GetAllPosts)
 
 	log.Printf("Server started successfully")
 	api.Run()
