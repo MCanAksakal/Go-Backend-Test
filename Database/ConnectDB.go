@@ -7,6 +7,8 @@ import (
 	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+
+	Models "MainPackage/Models"
 )
 
 func ConnectDB() *gorm.DB {
@@ -30,6 +32,9 @@ func ConnectDB() *gorm.DB {
 	} else {
 		log.Printf("Database connection succeeded")
 	}
+
+	db.AutoMigrate(&Models.UserAuth{})
+	log.Println("Database Migration Completed!")
 
 	return db
 }

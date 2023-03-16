@@ -18,5 +18,7 @@ func main() {
 	api.GET("/userlist", UserCRUD.GetAllPosts)
 
 	log.Printf("Server started successfully")
+
 	api.Run()
+
 }

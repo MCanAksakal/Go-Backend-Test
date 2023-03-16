@@ -1,11 +1,14 @@
-package UserCRUD
+package UserAuth
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/gin-gonic/gin"
 
-	Database "MainPackage/Database"
+	Crypt "MainPackage/Crypto"
+	"MainPackage/Database"
+	"MainPackage/Models"
 
 	"strconv"
 )
@@ -25,17 +28,23 @@ func CreatePost(c *gin.Context) {
 	label := c.PostForm("label")
 	title := c.PostForm("title")
 	body := c.PostForm("body")
-	image := c.PostForm("image")
+	image, err := Crypt.Encrypt(c.PostForm("image"))
 
-	u := Post{}
+	var pass string = image
+
+	if err != nil {
+		fmt.Println("error encrypting your classified text: ", err)
+	}
+
+	u := Models.UserAuth{}
 	db.Last(&u)
 
-	post := Post{
-		ID:    u.ID,
-		Label: label,
-		Title: title,
-		Body:  body,
-		Image: image,
+	post := Models.UserAuth{
+		ID:       u.ID + 1,
+		UserName: label,
+		Phone:    title,
+		Mail:     body,
+		Password: pass,
 	}
 
 	if err := db.Create(&post).Error; err != nil {
@@ -62,7 +71,7 @@ func GetPost(c *gin.Context) {
 
 	id := c.Param("id")
 
-	u := Post{}
+	u := Models.UserAuth{}
 
 	if err := db.Find(&u, id).Error; err != nil {
 		c.JSON(200, gin.H{
@@ -87,7 +96,7 @@ func GetAllPosts(c *gin.Context) {
 
 	db := Database.ConnectDB()
 
-	allPosts := []Post{}
+	allPosts := []Models.UserAuth{}
 
 	if err := db.Find(&allPosts).Error; err != nil {
 		c.JSON(200, gin.H{
